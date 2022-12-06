@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: load-balancer-alts
+  name: alts
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: load-balancer-alts
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: load-balancer-alts
+    spec:
+      containers:
+        - name: alts
+          image: alts:latest
+          imagePullPolicy: Never
+          resources:
+            requests:
+              memory: "50Mi"
+              cpu: "0.5"
+            limits:
+              memory: "100Mi"
+              cpu: "1"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ALTS_PORT
+              value: "8080"
