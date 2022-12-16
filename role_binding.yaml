@@ -1,0 +1,13 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: alts-app-full-access-role-binding
+  namespace: alts-app
+subjects:
+- kind: User
+  name: edehghani@microsoft.com
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: alts-app-full-access-role
+  apiGroup: rbac.authorization.k8s.io

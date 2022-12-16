@@ -1,6 +1,12 @@
 # syntax=docker/dockerfile:1
 
-FROM golang:1.16-alpine
+##
+## STEP 1 - BUILD
+##
+
+FROM golang:1.19-alpine
+
+RUN addgroup -S alts && adduser -S alts -G alts
 
 ENV GO111MODULE=on
 
@@ -12,6 +18,19 @@ COPY go.sum ./
 RUN go mod download
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /ALTS
+RUN CGO_ENABLED=0 GOOS=linux go build -o /ALTS
+
+##
+## STEP 2 - DEPLOY
+##
+#FROM scratch
+
+#WORKDIR /
+
+#COPY --from=build /ALTS /ALTS
+#COPY --from=build /etc/passwd /etc/passwd
+
+USER alts
+
 EXPOSE 8080
-CMD [ "/ALTS" ]
+ENTRYPOINT [ "/ALTS" ]
