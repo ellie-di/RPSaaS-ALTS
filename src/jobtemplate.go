@@ -95,7 +95,7 @@ func listJobTemplate(name string, c *gin.Context) (count int) {
 	if name == "" {
 		filter = bson.D{}
 	} else {
-		filter = bson.D{{"name", name}}
+		filter = bson.D{{Key: "name", Value: name}}
 	}
 
 	conn := connect()
