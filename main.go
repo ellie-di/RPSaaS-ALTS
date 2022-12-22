@@ -46,6 +46,9 @@ func main() {
 
 	router := gin.Default()
 
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"data": "hello from ALTS!"})
+	})
 	router.GET("/jobtemplate", alts.GetJobTemplateHandler)
 	router.GET("/jobtemplate/:name", alts.GetJobTemplateByNameHandler)
 	router.GET("/jobtemplate/ResourceCreationValidate", alts.ValidateJobTemplateHandler)
