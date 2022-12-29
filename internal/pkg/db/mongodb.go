@@ -1,4 +1,4 @@
-package alts
+package db
 
 import (
 	"context"
@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	database string
+	DbName string
 )
 
 const (
@@ -21,14 +21,14 @@ const (
 )
 
 // connects to MongoDB
-func connect() *mongo.Client {
+func Connect() *mongo.Client {
 	mongoDBConnectionString := os.Getenv(mongoDBConnectionStringEnvVarName)
 	if mongoDBConnectionString == "" {
 		log.Fatal("missing environment variable: ", mongoDBConnectionStringEnvVarName)
 	}
 
-	database = os.Getenv(mongoDBDatabaseEnvVarName)
-	if database == "" {
+	DbName = os.Getenv(mongoDBDatabaseEnvVarName)
+	if DbName == "" {
 		log.Fatal("missing environment variable: ", mongoDBDatabaseEnvVarName)
 	}
 

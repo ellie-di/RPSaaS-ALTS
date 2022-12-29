@@ -1,9 +1,7 @@
-package alts
+package types
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 )
 
 type Job struct {
@@ -26,16 +24,4 @@ func (job *Job) String() string {
 			"RepoFile:%s, KeepFailedEnvironment:%t, Results:%v, Status:%s, Duration:%s, LogUrl:%s]",
 		job.Id, job.JobTemplateInstance, job.Name, job.ResourceGroupNamePrefix,
 		job.Image, job.RepoFile, job.KeepFailedEnvironment, job.Results, job.Status, job.Duration, job.LogUrl)
-}
-
-func GetJobHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("GetJobHandler!")
-}
-
-func PutJobHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("PutJobHandler!")
-}
-
-func DeleteJobHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("DeleteJobHandler!")
 }

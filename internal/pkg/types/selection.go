@@ -1,9 +1,7 @@
-package alts
+package types
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 )
 
 type Selection struct {
@@ -25,16 +23,4 @@ func (selection *Selection) String() string {
 			"Action:%s, Times:%d, Retry:%d, UseNewEnvironment:%t, IgnoreFailure:%t]",
 		selection.CaseName, selection.CaseArea, selection.CaseCategory, selection.CasePriority, selection.CaseTags,
 		selection.Action, selection.Times, selection.Retry, selection.UseNewEnvironment, selection.IgnoreFailure)
-}
-
-func GetSelectionHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("GetSelectionHandler!")
-}
-
-func PutSelectionHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("PutSelectionHandler!")
-}
-
-func DeleteSelectionHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("DeleteSelectionHandler!")
 }

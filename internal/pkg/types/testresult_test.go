@@ -1,4 +1,4 @@
-package alts
+package types
 
 import (
 	"testing"

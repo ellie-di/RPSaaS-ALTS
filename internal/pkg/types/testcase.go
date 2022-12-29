@@ -1,9 +1,7 @@
-package alts
+package types
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 )
 
 type TestCase struct {
@@ -25,16 +23,4 @@ func (testCase *TestCase) String() string {
 			"Priority:%d, Estimation:%s, Description:%s, TestSuiteName:%s, TestSuiteDescription:%s]",
 		testCase.Id, testCase.Name, testCase.Area, testCase.Category, testCase.Tags,
 		testCase.Priority, testCase.Estimation, testCase.Description, testCase.TestSuiteName, testCase.TestSuiteDescription)
-}
-
-func GetTestCaseHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("GetTestCaseHandler!")
-}
-
-func PutTestCaseHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("PutTestCaseHandler!")
-}
-
-func DeleteTestCaseHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("DeleteTestCaseHandler!")
 }

@@ -1,9 +1,7 @@
-package alts
+package types
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 )
 
 type TestResult struct {
@@ -35,16 +33,4 @@ func (testResult *TestResult) String() string {
 		testResult.LogUrl, testResult.Image, testResult.VmSize, testResult.Location, testResult.KernelVersion,
 		testResult.DistroVersion, testResult.VhdGeneration, testResult.WalaVersion, testResult.ExtraFields,
 		testResult.Duration, testResult.StartTime, testResult.EndTime)
-}
-
-func GetTestResultHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("GetTestResultHandler!")
-}
-
-func PutTestResultHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("PutTestResultHandler!")
-}
-
-func DeleteTestResultHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("DeleteTestResultHandler!")
 }

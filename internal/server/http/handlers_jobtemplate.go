@@ -1,4 +1,4 @@
-package alts
+package http
 
 import (
 	"context"
@@ -9,32 +9,13 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/bson"
+	"main.go/internal/pkg/db"
+	"main.go/internal/pkg/types"
 )
 
 const (
 	mongoDBCollectionEnvVarName = "MONGODB_COLLECTION"
 )
-
-type JobTemplate struct {
-	Id         string      `json:"id"`
-	Name       string      `json:"name"`
-	Tags       string      `json:"tags"`
-	Selections []Selection `json:"selections"`
-	Location   string      `json:"location"`
-	VmSize     string      `json:"vmsize"`
-	CreatedBy  string      `json:"createdby"`
-	CreatedOn  string      `json:"createdon"`
-	UpdatedBy  string      `json:"updatedby"`
-	UpdatedOn  string      `json:"updatedon"`
-}
-
-func (jobTemplate *JobTemplate) String() string {
-	return fmt.Sprintf(
-		"JobTemplate:[Id:%s, Name:%s, Tags:%s, Selections:%v, Location:%s,"+
-			"VmSize:%s, CreatedBy:%s, CreatedOn:%s, UpdatedBy:%s, UpdatedOn:%s]",
-		jobTemplate.Id, jobTemplate.Name, jobTemplate.Tags, jobTemplate.Selections, jobTemplate.Location,
-		jobTemplate.VmSize, jobTemplate.CreatedBy, jobTemplate.CreatedOn, jobTemplate.UpdatedBy, jobTemplate.UpdatedOn)
-}
 
 func GetJobTemplateHandler(c *gin.Context) {
 	log.Println("GetJobTemplateHandler!")
@@ -68,8 +49,8 @@ func ValidateJobTemplateHandler(c *gin.Context) {
 }
 
 // creates a JobTemplate
-func createJobTemplate(jobTemplate JobTemplate) {
-	c := connect()
+func createJobTemplate(jobTemplate types.JobTemplate) {
+	c := db.Connect()
 	ctx := context.Background()
 	defer c.Disconnect(ctx)
 
@@ -78,8 +59,8 @@ func createJobTemplate(jobTemplate JobTemplate) {
 		log.Fatal("missing environment variable: ", mongoDBCollectionEnvVarName)
 	}
 
-	jobTemplateCollection := c.Database(database).Collection(collection)
-	r, err := jobTemplateCollection.InsertOne(ctx, JobTemplate{Name: jobTemplate.Name, Tags: jobTemplate.Tags,
+	jobTemplateCollection := c.Database(db.DbName).Collection(collection)
+	r, err := jobTemplateCollection.InsertOne(ctx, types.JobTemplate{Name: jobTemplate.Name, Tags: jobTemplate.Tags,
 		Selections: jobTemplate.Selections, Location: jobTemplate.Location, VmSize: jobTemplate.VmSize,
 		CreatedBy: jobTemplate.CreatedBy, CreatedOn: jobTemplate.CreatedOn, UpdatedBy: jobTemplate.UpdatedBy, UpdatedOn: jobTemplate.UpdatedOn})
 	if err != nil {
@@ -98,7 +79,7 @@ func listJobTemplate(name string, c *gin.Context) (count int) {
 		filter = bson.D{{Key: "name", Value: name}}
 	}
 
-	conn := connect()
+	conn := db.Connect()
 	ctx := context.Background()
 	defer conn.Disconnect(ctx)
 
@@ -109,14 +90,14 @@ func listJobTemplate(name string, c *gin.Context) (count int) {
 		return
 	}
 
-	jobTemplateCollection := conn.Database(database).Collection(collection)
+	jobTemplateCollection := conn.Database(db.DbName).Collection(collection)
 	rs, err := jobTemplateCollection.Find(ctx, filter)
 	if err != nil {
 		log.Fatalf("failed to list jobtemplate(s) %v", err)
 		c.Writer.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	var jobtemplates []JobTemplate
+	var jobtemplates []types.JobTemplate
 	err = rs.All(ctx, &jobtemplates)
 	if err != nil {
 		log.Fatalf("failed to list jobtemplates(s) %v", err)
@@ -127,4 +108,16 @@ func listJobTemplate(name string, c *gin.Context) (count int) {
 	count = len(jobtemplates)
 	c.SecureJSON(http.StatusOK, jobtemplates)
 	return
+}
+
+func OnResourceCreationCompleted(w http.ResponseWriter, req *http.Request) {
+	log.Println("OnResourceCreationCompleted got called!")
+}
+
+func ResourceCreationValidate(w http.ResponseWriter, req *http.Request) {
+	log.Println("ResourceCreationValidate got called!")
+}
+
+func ResourceCreationBegin(w http.ResponseWriter, req *http.Request) {
+	log.Println("ResourceCreationBegin got called!")
 }
